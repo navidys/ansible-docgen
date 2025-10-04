@@ -127,7 +127,7 @@ package-install: package  ## Install rpm package
 #=================================================
 
 .PHONY: validate
-validate: gofmt lint pre-commit  ## Validate ansible-docgen code (fmt, lint, ...)
+validate: gofmt lint pre-commit codespell ## Validate ansible-docgen code (fmt, lint, ...)
 
 .PHONY: vendor
 vendor: ## Check vendor
