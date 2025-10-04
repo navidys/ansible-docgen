@@ -44,7 +44,20 @@ func NewDocumentGenerator(cmd *cobra.Command, args []string) (*DocumentGenerator
 
 // Generate generates roles documents.
 func (d *DocumentGenerator) Generate() error {
-	err := d.parseMetaDirectory()
+	rstat, err := os.Stat(d.roleDirectory)
+	if err != nil {
+		return fmt.Errorf("role directory stat: %w", err)
+	}
+
+	if !rstat.IsDir() {
+		return ErrInvalidRoleDirectory
+	}
+
+	d.RoleName = rstat.Name()
+
+	log.Debug().Msgf("role name: %s", d.RoleName)
+
+	err = d.parseMetaDirectory()
 	if err != nil {
 		return err
 	}

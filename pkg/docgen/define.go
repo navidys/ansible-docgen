@@ -1,11 +1,17 @@
 package docgen
 
+import "errors"
+
+var (
+	ErrInvalidRoleDirectory = errors.New("invalid role directory path")
+)
+
 type DocumentGenerator struct {
 	roleDirectory string
 	outputFile    string
 	templateFile  string
 	RoleName      string
-	RoleMetaInfo  AnsibleMeta
+	RoleMetaInfo  *AnsibleMeta
 }
 
 type AnsibleMeta struct {
