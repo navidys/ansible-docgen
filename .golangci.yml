@@ -12,6 +12,7 @@ formatters:
 linters:
   default: all
   disable:
+    - tagliatelle
     - exhaustruct
     - depguard
     # deprecated

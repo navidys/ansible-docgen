@@ -86,15 +86,15 @@ func init() { //nolint:gochecknoinits
 		"output",
 		"o",
 		outputFilename,
-		" Output readme file name. Defaults to README.md",
+		"output readme file name",
 	)
 	rootCmd.Flags().StringVarP(
 		&roleDirectory,
 		"role",
 		"r",
 		roleDirectory,
-		"Specifies the directory path to the Ansible role.",
+		"Ansible role directory path",
 	)
-	rootCmd.Flags().BoolP("version", "v", false, "Display version and exit")
-	rootCmd.Flags().BoolP("debug", "d", false, "Run in debug mode")
+	rootCmd.Flags().BoolP("version", "v", false, "display version and exit")
+	rootCmd.Flags().BoolP("debug", "d", false, "run in debug mode")
 }
