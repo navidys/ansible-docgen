@@ -26,8 +26,9 @@ var rootCmd = &cobra.Command{ //nolint:exhaustruct,gochecknoglobals
 }
 
 var (
-	outputFilename = "README.md" //nolint:gochecknoglobals
-	roleDirectory  = ""          //nolint:gochecknoglobals
+	outputFile    = "README.md"                               //nolint:gochecknoglobals
+	templateFile  = "/usr/share/doc/ansible-docgen/README.md" //nolint:gochecknoglobals
+	roleDirectory = ""                                        //nolint:gochecknoglobals
 )
 
 // Execute adds all child commands to the root command and sets flags appropriately.
@@ -82,10 +83,10 @@ func runRoot(cmd *cobra.Command, args []string) {
 
 func init() { //nolint:gochecknoinits
 	rootCmd.Flags().StringVarP(
-		&outputFilename,
+		&outputFile,
 		"output",
 		"o",
-		outputFilename,
+		outputFile,
 		"output readme file name",
 	)
 	rootCmd.Flags().StringVarP(
@@ -93,7 +94,14 @@ func init() { //nolint:gochecknoinits
 		"role",
 		"r",
 		roleDirectory,
-		"Ansible role directory path",
+		"ansible role directory path",
+	)
+	rootCmd.Flags().StringVarP(
+		&templateFile,
+		"template",
+		"t",
+		templateFile,
+		"template file used to generate output",
 	)
 	rootCmd.Flags().BoolP("version", "v", false, "display version and exit")
 	rootCmd.Flags().BoolP("debug", "d", false, "run in debug mode")

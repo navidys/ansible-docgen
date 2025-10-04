@@ -11,9 +11,8 @@ import (
 	"gopkg.in/yaml.v3"
 )
 
-func (d *DocumentGenerator) parseMetaDirectory() (*AnsibleMeta, error) {
+func (d *DocumentGenerator) parseMetaDirectory() error {
 	var (
-		metaInfo AnsibleMeta
 		yamlFile []byte
 		err      error
 	)
@@ -31,14 +30,14 @@ func (d *DocumentGenerator) parseMetaDirectory() (*AnsibleMeta, error) {
 		if errors.Is(err, os.ErrNotExist) {
 			log.Debug().Msg("meta file not found")
 
-			return &metaInfo, nil
+			return nil
 		}
 	}
 
-	err = yaml.Unmarshal(yamlFile, &metaInfo)
+	err = yaml.Unmarshal(yamlFile, &d.RoleMetaInfo)
 	if err != nil {
-		return nil, fmt.Errorf("failed to unmarshal meta: %w", err)
+		return fmt.Errorf("failed to unmarshal meta: %w", err)
 	}
 
-	return &metaInfo, nil
+	return nil
 }

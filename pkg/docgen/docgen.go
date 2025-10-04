@@ -16,17 +16,25 @@ func NewDocumentGenerator(cmd *cobra.Command, args []string) (*DocumentGenerator
 	}
 
 	// output filename
-	outputFilename, err := cmd.Flags().GetString("output")
+	outputFile, err := cmd.Flags().GetString("output")
 	if err != nil {
 		return nil, fmt.Errorf("failed to get output flag: %w", err)
 	}
 
-	log.Debug().Msgf("role directory path: %s", roleDirectory)
-	log.Debug().Msgf("output filename: %s", outputFilename)
+	// template filename
+	templateFile, err := cmd.Flags().GetString("template")
+	if err != nil {
+		return nil, fmt.Errorf("failed to get template flag: %w", err)
+	}
+
+	log.Debug().Msgf("role directory: %s", roleDirectory)
+	log.Debug().Msgf("output file: %s", outputFile)
+	log.Debug().Msgf("template file: %s", templateFile)
 
 	docg := DocumentGenerator{
-		OutputFilename: outputFilename,
-		RoleDirectory:  roleDirectory,
+		OutputFile:    outputFile,
+		RoleDirectory: roleDirectory,
+		TemplateFile:  templateFile,
 	}
 
 	return &docg, nil
@@ -34,10 +42,19 @@ func NewDocumentGenerator(cmd *cobra.Command, args []string) (*DocumentGenerator
 
 // Generate generates roles documents.
 func (d *DocumentGenerator) Generate() error {
-	_, err := d.parseMetaDirectory()
+	err := d.parseMetaDirectory()
 	if err != nil {
 		return err
 	}
 
+	err = d.write()
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (d *DocumentGenerator) write() error {
 	return nil
 }

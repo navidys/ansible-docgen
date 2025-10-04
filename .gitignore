@@ -6,3 +6,4 @@ bin/
 *.log
 *.out
 .gopathok
+TEST.md
