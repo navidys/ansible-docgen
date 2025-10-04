@@ -2,6 +2,8 @@ package docgen
 
 import (
 	"fmt"
+	"os"
+	"text/template"
 
 	"github.com/rs/zerolog/log"
 	"github.com/spf13/cobra"
@@ -32,9 +34,9 @@ func NewDocumentGenerator(cmd *cobra.Command, args []string) (*DocumentGenerator
 	log.Debug().Msgf("template file: %s", templateFile)
 
 	docg := DocumentGenerator{
-		OutputFile:    outputFile,
-		RoleDirectory: roleDirectory,
-		TemplateFile:  templateFile,
+		outputFile:    outputFile,
+		roleDirectory: roleDirectory,
+		templateFile:  templateFile,
 	}
 
 	return &docg, nil
@@ -56,5 +58,27 @@ func (d *DocumentGenerator) Generate() error {
 }
 
 func (d *DocumentGenerator) write() error {
+	tmpl, err := template.ParseFiles(d.templateFile)
+	if err != nil {
+		return fmt.Errorf("parse template: %w", err)
+	}
+
+	output, err := os.Create(d.outputFile)
+	if err != nil {
+		return fmt.Errorf("create output file: %w", err)
+	}
+
+	defer func() {
+		err := output.Close()
+		if err != nil {
+			log.Error().Msgf("output file close: %s", err.Error())
+		}
+	}()
+
+	err = tmpl.Execute(output, d)
+	if err != nil {
+		return fmt.Errorf("execute template: %w", err)
+	}
+
 	return nil
 }

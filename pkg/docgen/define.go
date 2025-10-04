@@ -1,10 +1,11 @@
 package docgen
 
 type DocumentGenerator struct {
-	RoleDirectory string
-	OutputFile    string
-	TemplateFile  string
-	RoleMetaInfo  *AnsibleMeta
+	roleDirectory string
+	outputFile    string
+	templateFile  string
+	RoleName      string
+	RoleMetaInfo  AnsibleMeta
 }
 
 type AnsibleMeta struct {

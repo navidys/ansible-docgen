@@ -17,8 +17,8 @@ func (d *DocumentGenerator) parseMetaDirectory() error {
 		err      error
 	)
 
-	metaFile1 := path.Join(d.RoleDirectory, "meta", "main.yml")
-	metaFile2 := path.Join(d.RoleDirectory, "meta", "main.yaml")
+	metaFile1 := path.Join(d.roleDirectory, "meta", "main.yml")
+	metaFile2 := path.Join(d.roleDirectory, "meta", "main.yaml")
 
 	log.Debug().Msgf("reading meta from %s", metaFile1)
 
