@@ -1,0 +1,61 @@
+%global with_debug 0
+
+%if 0%{?with_debug}
+%global _find_debuginfo_dwz_opts %{nil}
+%global _dwz_low_mem_die_limit 0
+%else
+%global debug_package %{nil}
+%endif
+
+%global provider github
+%global provider_tld com
+%global project containers
+%global repo %{name}
+%global import_path %{provider}.%{provider_tld}/%{project}/%{repo}
+%global git0 https://%{import_path}
+
+Name: ansible-docgen
+Version: 0.1.0
+Release: dev.1%{?dist}
+Summary: Auto documentation for Ansible roles
+License: MIT
+URL: %{git0}
+VCS: {{{ git_dir_vcs }}}
+Source0: {{{ git_dir_pack }}}
+
+BuildRequires: gcc
+BuildRequires: golang
+BuildRequires: glib2-devel
+BuildRequires: glibc-devel
+BuildRequires: glibc-static
+BuildRequires: git-core
+BuildRequires: go-rpm-macros
+BuildRequires: make
+
+%description
+%{name} is auto documentation for Ansible roles.
+
+%prep
+{{{ git_dir_setup_macro }}}
+
+%build
+%set_build_flags
+make binary
+
+%install
+install -dp %{buildroot}%{_bindir}
+install -p ./bin/%{name} %{buildroot}%{_bindir}
+
+%check
+
+#define license tag if not already defined
+%{!?_licensedir:%global license %doc}
+
+%files
+%license LICENSE
+%doc docs/README.md
+%{_bindir}/%{name}
+
+%changelog
+* Sat Oct 04 2025 Navid Yaghoobi <navidys@fedoraproject.org> 0.1.0-dev-1
+- Initial release

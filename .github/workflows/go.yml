@@ -1,0 +1,42 @@
+name: Go
+on:
+  push:
+    branches: [ main ]
+
+jobs:
+  vendoring:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/setup-go@v6
+        with:
+          go-version: '1.24.7'
+      - uses: actions/checkout@v5
+      - run: |
+          go mod tidy
+          go mod vendor
+          go mod verify
+          bash ./hack/tree_status.sh
+
+  golangci-lint:
+    runs-on: ubuntu-latest
+    container:
+      image: fedora:latest
+    steps:
+      - uses: actions/setup-go@v6
+        with:
+          go-version: '1.24.7'
+      - uses: actions/checkout@v5
+      - run: |
+          bash hack/install_dep.sh
+          make .install.golangci-lint
+          make lint
+
+  build_binaries:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/setup-go@v6
+        with:
+          go-version: '1.24.7'
+      - uses: actions/checkout@v5
+      - run: |
+          make all
